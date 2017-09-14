@@ -1,4 +1,4 @@
-import {IpfsAddedFileResponse} from "./ValueObjects";
+import {IpfsAddedFileResponse, PeerId} from "./ValueObjects";
 const IpfsNode = require('ipfs');
 
 export default class Ipfs
@@ -45,6 +45,11 @@ export default class Ipfs
                         content: content
                     }], function(err: any, results: Array<{path: string, hash: string, size: number}>){
 
+                        //Exit on error
+                        if(err){
+                            reject(err);
+                        }
+
                         fulfill(new IpfsAddedFileResponse(
                             results[0].path,
                             results[0].hash,
@@ -58,5 +63,30 @@ export default class Ipfs
                 })
         });
     }
+
+    public peerId() : Promise<PeerId>
+    {
+        return new Promise((fulfill, reject) => {
+
+            this.ipfsInstance
+                .then(function(ipfs:any){
+
+                    ipfs.id(function (err:any, identity:any) {
+
+                        if (err) {
+                            reject(err);
+                        }
+
+                        fulfill(new PeerId(identity.id, identity.publicKey));
+                    })
+
+                })
+                .catch(function(err: any){
+                    reject(err);
+                })
+
+        })
+    }
+
 
 }

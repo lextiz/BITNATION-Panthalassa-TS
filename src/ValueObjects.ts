@@ -89,3 +89,32 @@ export class IpfsAddedFileResponse
         return this.size;
     }
 }
+
+export class PeerId
+{
+    /**
+     *
+     * @param {string} id
+     * @param {string} pubKey
+     */
+    constructor(private id: string, private pubKey: string) { }
+
+    /**
+     *
+     * @returns {string}
+     */
+    public getId() : string
+    {
+        return this.id;
+    }
+
+    /**
+     *
+     * @returns {string}
+     */
+    public getPubKey() : string
+    {
+        return this.pubKey;
+    }
+
+}
